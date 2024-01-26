@@ -344,6 +344,18 @@ def f_rm(args: argparse.Namespace):
         utils.write_to_repo_file(repos, "w")
 
 
+def f_cd(args: argparse.Namespace):
+    """
+    open a terminal in the selected repo location
+    """
+    names = args.repo
+    repos = utils.get_repos()
+    for name in names:
+        repo = repos[name]
+        os.spawnlp(os.P_NOWAIT, 'konsole', 'konsole', '--workdir', repo["path"])
+
+
+
 def f_git_cmd(args: argparse.Namespace):
     """
     Delegate git command/alias defined in `args.cmd`. Asynchronous execution is
@@ -476,6 +488,14 @@ def main(argv=None):
         "repo", nargs="+", choices=utils.get_repos(), help="remove the chosen repo(s)"
     )
     p_rm.set_defaults(func=f_rm)
+
+    p_rm = subparsers.add_parser(
+        "cd", description="open terminal in repo", help="open terminal in repo"
+    )
+    p_rm.add_argument(
+        "repo", nargs="+", choices=utils.get_repos(), help="open terminal in the repo(s)"
+    )
+    p_rm.set_defaults(func=f_cd)
 
     p_freeze = subparsers.add_parser(
         "freeze",

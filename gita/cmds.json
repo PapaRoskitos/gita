@@ -93,5 +93,10 @@
 "tag":{
   "cmd": "git tag -n",
   "help": "show tags"
+  },
+"tree":{
+  "cmd": "git tree",
+  "disable_async": true,
+  "help": "show tree"
   }
 }

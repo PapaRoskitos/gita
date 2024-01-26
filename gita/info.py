@@ -240,9 +240,15 @@ def get_symbols() -> Dict[str, str]:
 
 def get_repo_status(prop: Dict[str, str], no_colors=False) -> str:
     branch = get_head(prop["path"])
+    branch = branch[:30] + '...' if len(branch) > 30 else branch.ljust(33)
     dirty, staged, untracked, stashed, situ = _get_repo_status(prop)
     symbols = get_symbols()
-    info = f"{branch:<10} [{symbols[dirty]}{symbols[staged]}{symbols[stashed]}{symbols[untracked]}{symbols[situ]}]"
+    tmp =f"{symbols[dirty]}{symbols[staged]}{symbols[stashed]}{symbols[untracked]}{symbols[situ]}"
+    tmp = tmp[:4] + ' ' if len(tmp) > 3 else tmp.ljust(5)
+
+    info = f"{branch:<10} {tmp}"
+    #info = f"{branch:<10} [{symbols[dirty]}{symbols[staged]}{symbols[stashed]}{symbols[untracked]}{symbols[situ]}]"
+
 
     if no_colors:
         return f"{info:<18}"
